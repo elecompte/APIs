@@ -1,0 +1,17 @@
+services:
+  upload-api:
+    image: 127.0.0.1:9001/api:latest
+    build: .
+    restart: unless-stopped
+    ports:
+      - "8069:8080"
+    environment:
+      API_TOKEN: "${API_TOKEN}"
+      MAX_UPLOAD_MB: "500"
+      UPLOAD_DIR: /uploads
+    volumes:
+      - "/dockervol/ha/www/ss2:/uploads"
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
