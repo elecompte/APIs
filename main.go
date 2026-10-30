@@ -18,6 +18,8 @@ type server struct {
 	uploadDir string
 	token     string
 	maxBytes  int64
+	listenarrURL string
+	listenarrKey string
 }
 
 type errorResponse struct {
@@ -43,6 +45,8 @@ func main() {
 		uploadDir: envOr("UPLOAD_DIR", "/uploads"),
 		token:     token,
 		maxBytes:  maxMB * 1024 * 1024,
+		listenarrURL: os.Getenv("LISTENARR_URL"),
+		listenarrKey: os.Getenv("LISTENARR_API_KEY"),
 	}
 	if err := os.MkdirAll(s.uploadDir, 0o755); err != nil {
 		log.Fatalf("create upload directory: %v", err)
@@ -51,6 +55,7 @@ func main() {
 	mux := http.NewServeMux()
 	mux.HandleFunc("GET /health", s.health)
 	mux.HandleFunc("POST /upload", s.authorize(s.upload))
+	mux.HandleFunc("POST /goodreads/request", s.authorize(s.goodreadsRequest))
 
 	addr := envOr("LISTEN_ADDR", ":8080")
 	log.Printf("upload API listening on %s", addr)
