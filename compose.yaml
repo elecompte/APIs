@@ -7,6 +7,8 @@ services:
       - "8069:8080"
     environment:
       API_TOKEN: "${API_TOKEN}"
+      LISTENARR_URL: "${LISTENARR_URL:-http://10.0.0.2:4545}"
+      LISTENARR_API_KEY: "${LISTENARR_API_KEY:-}"
       MAX_UPLOAD_MB: "500"
       UPLOAD_DIR: /uploads
     volumes:
